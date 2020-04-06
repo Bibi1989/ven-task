@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import styled from "styled-components";
+import "./App.css";
+import FilterComponent from "./components/FilterComponent/FilterComponent";
+import DisplayComponent from "./components/DisplayComponent/DisplayComponent";
+import { ContextProvider } from "./Context/ContextProvider";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ContextProvider>
+      <Container>
+        <FilterComponent />
+        <DisplayComponent />
+      </Container>
+    </ContextProvider>
   );
 }
+
+export const Container = styled.div`
+  display: grid;
+  grid-template-columns: 20% 80%;
+  max-width: 105em;
+  padding-top: 5%;
+  margin: auto;
+`;
 
 export default App;
