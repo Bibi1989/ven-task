@@ -19,6 +19,7 @@ const ShowCarDetail = () => {
 
   return (
     <Container>
+      {/* <button onClick={() => postData()}>Upload</button> */}
       {filter ? (
         <Filtered cars={filter} page={page} filterCars={filterCars} />
       ) : (
@@ -72,11 +73,11 @@ const ShowCarDetail = () => {
                   </p>
                   <p>
                     <span>Bio: </span>
-                    <span>
+                    {/* <span>
                       {car.bio.length > 100
                         ? car.bio.slice(0, 100) + "..."
                         : car.bio}
-                    </span>
+                    </span> */}
                   </p>
                 </EmailBio>
               </Detail>
@@ -92,7 +93,7 @@ const ShowCarDetail = () => {
         ellipsisItem={null}
         firstItem={null}
         lastItem={null}
-        siblingRange={5}
+        siblingRange={10}
         totalPages={65000}
       />
     </Container>

@@ -1,5 +1,6 @@
 import React, { createContext, useReducer, useEffect, useState } from "react";
 import axios from "axios";
+// import { carsArray } from "../utils/cars";
 
 export const Context = createContext();
 
@@ -45,14 +46,12 @@ const initialState = {
 export const ContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [loading, setLoading] = useState(false);
-  //   const [carModel, setCarModel] = useState(null);
-  //   const [loading, setLoading] = useState(false);
 
   const fetchCars = async (p) => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:5500/api/cars?page=${p}`
+        `https://ven-task-api.herokuapp.com/api/cars?page=${p}`
       );
       setLoading(false);
       dispatch({ type: FETCH, payload: response.data.cars });
@@ -74,7 +73,7 @@ export const ContextProvider = ({ children }) => {
     try {
       setLoading(true);
       const response = await axios.post(
-        `http://localhost:5500/api/cars/query`,
+        `https://ven-task-api.herokuapp.com/api/cars/query`,
         query,
         {
           headers: {
