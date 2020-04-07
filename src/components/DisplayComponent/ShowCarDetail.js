@@ -1,17 +1,26 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { Table, Pagination, Form, Button, Input } from "semantic-ui-react";
+import { Pagination } from "semantic-ui-react";
 import { Context } from "../../Context/ContextProvider";
+import Filtered from "../Filtered/Filtered";
 const pic = "../../../Annotation.png";
 
-const Filtered = ({ cars }) => {
-  const { loading } = useContext(Context);
+const ShowCarDetail = () => {
+  const { cars, fetchCars, filter, loading, filterCars } = useContext(Context);
+  const [page, setPage] = useState(1);
+  console.log({ filter });
+  useEffect(() => {
+    fetchCars(page);
+  }, [page]);
+  const handlePagination = (_e, { activePage }) => {
+    setPage(activePage);
+  };
   if (loading) return <div style={{ textAlign: "center" }}>Loading</div>;
+
   return (
-    <Div>
-      <h1>Filtered Cars Owners</h1>
-      {cars === null ? (
-        <div className='found'>Filtered Not Found</div>
+    <Container>
+      {filter ? (
+        <Filtered cars={filter} page={page} filterCars={filterCars} />
       ) : (
         cars !== null &&
         cars.map((car) => {
@@ -75,12 +84,25 @@ const Filtered = ({ cars }) => {
           );
         })
       )}
-    </Div>
+      <Pagination
+        activePage={page}
+        onPageChange={handlePagination}
+        boundaryRange={0}
+        defaultActivePage={page}
+        ellipsisItem={null}
+        firstItem={null}
+        lastItem={null}
+        siblingRange={5}
+        totalPages={65000}
+      />
+    </Container>
   );
 };
 
-const Div = styled.div`
+const Container = styled.div`
   width: 100%;
+  background: #fafafa;
+  padding: 0.6em;
 `;
 
 const Car = styled.div`
@@ -164,4 +186,4 @@ const H2 = styled.h2`
   grid-template-columns: 30% 70%;
 `;
 
-export default Filtered;
+export default ShowCarDetail;

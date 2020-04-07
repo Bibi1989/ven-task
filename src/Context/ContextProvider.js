@@ -5,6 +5,7 @@ export const Context = createContext();
 
 const FETCH = "FETCH";
 const FILTER = "FILTER";
+const FILL = "FILL";
 const ERROR = "ERROR";
 
 const reducer = (state, action) => {
@@ -19,6 +20,11 @@ const reducer = (state, action) => {
         ...state,
         filter: action.payload,
       };
+    case FILL:
+      return {
+        ...state,
+        fill: action.payload,
+      };
     case ERROR:
       return {
         ...state,
@@ -32,23 +38,22 @@ const reducer = (state, action) => {
 const initialState = {
   cars: null,
   filter: null,
+  fill: null,
   error: null,
 };
 
 export const ContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [loading, setLoading] = useState(false);
-  const [carModel, setCarModel] = useState(null);
+  //   const [carModel, setCarModel] = useState(null);
   //   const [loading, setLoading] = useState(false);
 
   const fetchCars = async (p) => {
-    console.log({ p });
     try {
       setLoading(true);
       const response = await axios.get(
         `http://localhost:5500/api/cars?page=${p}`
       );
-      console.log(response);
       setLoading(false);
       dispatch({ type: FETCH, payload: response.data.cars });
     } catch (error) {
@@ -57,27 +62,36 @@ export const ContextProvider = ({ children }) => {
     }
   };
 
-  const filterCars = async (text) => {
-    console.log(text);
+  const filterCars = async (data, p) => {
+    console.log(data);
+    const query = {
+      start_year: data !== undefined && parseInt(data.start),
+      end_year: data !== undefined && parseInt(data.end),
+      gender: data !== undefined && data.gender,
+      countries: data !== undefined && data.count,
+      colors: data !== undefined && data.col,
+    };
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:5500/api/cars`);
-      const car_model = response.data.cars.filter(
-        (car) => car.car_model.toLowerCase() === text.toLowerCase()
+      const response = await axios.post(
+        `http://localhost:5500/api/cars/query`,
+        query,
+        {
+          headers: {
+            "Content-type": "application/json",
+          },
+        }
       );
-      //   console.log(car_model);
-      setCarModel(car_model);
       setLoading(false);
-      dispatch({ type: FILTER, payload: car_model });
+      dispatch({ type: FILTER, payload: response.data.car });
     } catch (error) {
       setLoading(false);
       dispatch({ type: ERROR, payload: error.response });
     }
   };
-
-  //   useEffect(() => {
-  //     lenCars();
-  //   }, []);
+  const fil = async (filled) => {
+    dispatch({ type: FILL, payload: filled });
+  };
 
   return (
     <Context.Provider
@@ -85,9 +99,11 @@ export const ContextProvider = ({ children }) => {
         cars: state.cars,
         error: state.error,
         filter: state.filter,
+        fill: state.fill,
         loading,
         fetchCars,
         filterCars,
+        fil,
       }}
     >
       {children}

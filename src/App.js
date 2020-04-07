@@ -4,14 +4,18 @@ import "./App.css";
 import FilterComponent from "./components/FilterComponent/FilterComponent";
 import DisplayComponent from "./components/DisplayComponent/DisplayComponent";
 import { ContextProvider } from "./Context/ContextProvider";
+import ShowCarDetail from "./components/DisplayComponent/ShowCarDetail";
 
 function App() {
   return (
     <ContextProvider>
-      <Container>
-        <FilterComponent />
+      {/* <Container>
         <DisplayComponent />
-      </Container>
+      </Container> */}
+      <FilterComponent />
+      <Div>
+        <ShowCarDetail />
+      </Div>
     </ContextProvider>
   );
 }
@@ -22,6 +26,12 @@ export const Container = styled.div`
   max-width: 105em;
   padding-top: 5%;
   margin: auto;
+`;
+
+const Div = styled.div`
+  width: 95%;
+  margin: auto;
+  padding: 2.5% 0;
 `;
 
 export default App;
